@@ -23,14 +23,17 @@
     global: yes
 
 - name: create "web" directory
+  become: true
   file: 
-    path: ~/web
+    path: /home/ubuntu/web
     state: directory
+    mode: 0755
 
 - name: copy index.js
+  become: true
   copy:
     src: index.js
-    dest: ~/web/index.js
+    dest: /home/ubuntu/web/index.js
 
 - name: start webserver
   command: pm2 start ~/web/index.js
