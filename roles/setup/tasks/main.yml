@@ -1,0 +1,37 @@
+---
+- name: "update apt packages."
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: "upgrade packages"
+  become: yes
+  apt:
+    upgrade: yes
+
+- name: install npm && nodejs
+  package: 
+    name: "{{item}}"
+    state: present
+  loop:
+    - nodejs
+    - npm
+
+- name: install pm2 globally
+  npm: 
+    name: pm2
+    global: yes
+
+- name: create "web" directory
+  file: 
+    path: ~/web
+    state: directory
+
+- name: copy index.js
+  copy:
+    src: index.js
+    dest: ~/web/index.js
+
+- name: start webserver
+  command: pm2 start ~/web/index.js
+  become_user: ubuntu
